@@ -25,15 +25,15 @@ String user = "root";
 String password = "";
 try {
 Class.forName(driver);
-String query = "SELECT a.LAST_NAME AS Employee, b.LAST_NAME AS Manager "
-        + "FROM employees a,employees b "
-        + "WHERE a.MANAGER_ID = b.EMPLOYEE_ID";
+var query = "SELECT A.LAST_NAME AS 'employee', B.LAST_NAME AS 'manager' \n"
+                    + "FROM employees A LEFT JOIN employees B \n"
+                    + "ON A.MANAGER_ID = B.EMPLOYEE_ID\n"
+                    + "WHERE B.LAST_NAME IS NOT Null";   
 try (
-Connection con =
-DriverManager.getConnection(url, user, password);
-Statement st = con.createStatement();
-ResultSet rs = st.executeQuery(query)) {
-int colNum = getColumnNames(rs);
+ Connection con
+    = DriverManager.getConnection(url, user, password);  Statement st = con.createStatement();  ResultSet rs = st.executeQuery(query)) {
+    int colNum = getColumnNames(rs);
+System.out.println();
 if (colNum > 0) {
 while (rs.next()) {
 for (int i = 0; i < colNum; i++) {
@@ -48,8 +48,7 @@ System.out.print(rs.getString(i + 1) + ", ");
 } catch (SQLException e) {
 System.out.println(e);
 }//end try catch
-}
-catch (ClassNotFoundException e) {
+} catch (ClassNotFoundException e) {
 System.out.println(e);
 }
 }
@@ -66,9 +65,9 @@ ResultSetMetaData rsMetaData = rs.getMetaData();
 numberOfColumns = rsMetaData.getColumnCount();
 //get and print the column names,
 // column indexes start from 1
-for (int i = 1; i < numberOfColumns + 1; i++) {
+for (int i = 1; i < numberOfColumns; i++) {
 String columnName = rsMetaData.getColumnName(i);
-System.out.print(columnName + ", ");
+System.out.print( "Employee,Manager ");
 }//endfor
 }//endif
 //place the cursor on a new line in the console System.out.println();
